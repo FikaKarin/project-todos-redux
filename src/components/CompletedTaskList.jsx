@@ -10,15 +10,11 @@ export const CompletedTaskList = () => {
       <ul>
         {completedTasks.map((task) => (
           <li key={task.id}>
-            {task.text}{' '}
-            {task.readMoreLink && (
-              <a href={task.readMoreLink} target="_blank" rel="noopener noreferrer">
-                More info on this topic
-              </a>
-            )}
+            {task.text}
           </li>
         ))}
       </ul>
     </div>
   );
 };
+

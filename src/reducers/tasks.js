@@ -1,6 +1,8 @@
+// Import createSlice function from Redux Toolkit and tasksData from tasks.json
 import { createSlice } from '@reduxjs/toolkit';
 import tasksData from '../tasks.json';
 
+// Create a slice for tasks with initial state and reducers
 export const tasksSlice = createSlice({
   name: 'tasks',
   initialState: {
@@ -11,9 +13,11 @@ export const tasksSlice = createSlice({
     completedToday: [], // Added completedToday array
   },
   reducers: {
+    // Add a new task to the allTasks array
     addTask: (state, action) => {
       state.allTasks.push(action.payload);
     },
+    // Remove a task by its ID, move it to removedTasks array
     removeTask: (state, action) => {
       const removedTask = state.allTasks.find(
         (task) => task.id === action.payload
@@ -26,12 +30,14 @@ export const tasksSlice = createSlice({
       );
       state.removedTasks.push(removedTask);
     },
+    // Undo the removal of the last removed task
     undoRemoveTask: (state) => {
       const lastRemovedTask = state.removedTasks.pop();
       if (lastRemovedTask) {
         state.allTasks.push(lastRemovedTask);
       }
     },
+    // Toggle the completion status of a task
     toggleTaskCompletion: (state, action) => {
       const taskId = action.payload;
       const task = state.allTasks.find((task) => task.id === taskId);
@@ -54,11 +60,9 @@ export const tasksSlice = createSlice({
         task.completed = !task.completed;
       }
     },
+    // Start a new day by resetting completedToday array and unchecking all completed tasks
     startNewDay: (state) => {
-      // Reset completedToday array
       state.completedToday = [];
-
-      // Uncheck all completed tasks
       state.allTasks.forEach((task) => {
         task.completed = false;
       });

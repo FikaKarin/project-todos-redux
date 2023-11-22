@@ -2,6 +2,7 @@ export const TaskListItem = ({
     task,
     handleToggleChosen,
     handleRemoveTask,
+    handleUndoRemoveTask,
   }) => (
     <li key={task.id}>
       <input
@@ -18,6 +19,9 @@ export const TaskListItem = ({
       <button onClick={() => handleRemoveTask(task.id)}>Remove</button>
       {task.dueDate && (
         <p>Due Date: {new Date(task.dueDate).toLocaleDateString()}</p>
+      )}
+      {task.isRemoved && (
+        <button onClick={() => handleUndoRemoveTask(task.id)}>Undo Remove</button>
       )}
     </li>
   );

@@ -5,7 +5,11 @@ import {
   removeTask,
   undoRemoveTask,
   startNewDay,
-} from '../reducers/tasks';
+} from '../../reducers/tasks';
+import { TaskListHeader } from '../TaskListHeader/TaskListHeader';
+import { TaskListFilters } from '../TaskListFilter/TaskListFilters';
+import { NewTaskDueDate } from '../NewTaskDueDate/NewTaskDueDate';
+import { TaskListItem } from '../TaskListItem/TaskListItem';
 
 // Define the TaskList component
 export const TaskList = () => {
@@ -16,6 +20,11 @@ export const TaskList = () => {
   const dispatch = useDispatch();
   const [dailyLimitReached, setDailyLimitReached] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(getTimeRemaining());
+  const [newTask, setNewTask] = useState({ text: '', dueDate: null });
+  const [showCompleted, setShowCompleted] = useState(true);
+  const [showUncompleted, setShowUncompleted] = useState(true);
+  const [createdAfterDate, setCreatedAfterDate] = useState(null);
+  const [sortByDueDate, setSortByDueDate] = useState(false);
 
   // useEffect: Load state from localStorage when the component mounts
   useEffect(() => {
@@ -94,41 +103,45 @@ export const TaskList = () => {
   // JSX: Render the TaskList component
   return (
     <div>
-      <h2>All Tasks</h2>
-      <p>
-        {completedToday.length}/{3} tasks completed today
-      </p>
-      {dailyLimitReached && (
-        <p style={{ color: 'red' }}>
-          Don't stress trying to un-stress. 3 tasks a day is enough to make a
-          difference
-        </p>
-      )}
-      <p>
-        Time remaining until the list resets: {timeRemaining.hours}h{' '}
-        {timeRemaining.minutes}m {timeRemaining.seconds}s
-      </p>
+      <TaskListHeader
+        completedToday={completedToday}
+        dailyLimitReached={dailyLimitReached}
+        timeRemaining={timeRemaining}
+      />
+      <TaskListFilters
+        showCompleted={showCompleted}
+        showUncompleted={showUncompleted}
+        setShowCompleted={setShowCompleted}
+        setShowUncompleted={setShowUncompleted}
+        setSortByDueDate={setSortByDueDate} // Pass this prop
+      />
       <ul>
-        {allTasks.map((task) => (
-          <li key={task.id}>
-            <input
-              type='checkbox'
-              checked={task.completed}
-              onChange={() => handleToggleCompletion(task.id)}
+        {allTasks
+          .filter(
+            (task) =>
+              (showCompleted && task.completed) ||
+              (showUncompleted && !task.completed)
+          )
+          .filter(
+            (task) =>
+              !createdAfterDate || new Date(task.createdAt) > createdAfterDate
+          )
+          .sort((a, b) => {
+            if (sortByDueDate) {
+              return a.dueDate - b.dueDate; // Assuming dueDate is a Date object
+            } else {
+              return 0; // No sorting by due date
+            }
+          })
+          .map((task) => (
+            <TaskListItem
+              key={task.id}
+              task={task}
+              handleToggleCompletion={handleToggleCompletion}
+              handleRemoveTask={handleRemoveTask}
+              handleUndoRemoveTask={handleUndoRemoveTask}
             />
-            {task.text}{' '}
-            {task.readMoreLink && (
-              <a
-                href={task.readMoreLink}
-                target='_blank'
-                rel='noopener noreferrer'
-              >
-                Read more
-              </a>
-            )}
-            <button onClick={() => handleRemoveTask(task.id)}>Remove</button>
-          </li>
-        ))}
+          ))}
       </ul>
       {removedTasks.length > 0 && (
         <div>

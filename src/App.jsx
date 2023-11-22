@@ -2,9 +2,9 @@ import React from 'react';
 import { Provider } from 'react-redux';
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import tasksReducer from './reducers/tasks';
-import { TaskList } from './components/TaskList';
-import { TaskForm } from './components/TaskForm';
-import { CompletedTaskList } from './components/CompletedTaskList';
+import { TaskList } from './components/TaskList/TaskList';
+import { TaskForm } from './components/Taskform/TaskForm';
+import { CompletedTaskList } from './components/CompletedTaskList/CompletedTaskList';
 
 const reducer = combineReducers({
   tasks: tasksReducer,

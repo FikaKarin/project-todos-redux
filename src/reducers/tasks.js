@@ -6,7 +6,11 @@ import tasksData from '../tasks.json';
 export const tasksSlice = createSlice({
   name: 'tasks',
   initialState: {
-    allTasks: tasksData,
+    allTasks: tasksData.map((task) => ({
+      ...task,
+      createdAt: new Date().toISOString(), // Convert to string
+      dueDate: null,
+    })),
     completedTasks: [],
     removedTasks: [],
     dailyTaskLimit: 3,
@@ -15,7 +19,15 @@ export const tasksSlice = createSlice({
   reducers: {
     // Add a new task to the allTasks array
     addTask: (state, action) => {
-      state.allTasks.push(action.payload);
+      const { text, dueDate } = action.payload;
+      const newTask = {
+        id: Date.now(),
+        text,
+        completed: false,
+        createdAt: new Date().toISOString(), // Convert to a string
+        dueDate,
+      };
+      state.allTasks.push(newTask);
     },
     // Remove a task by its ID, move it to removedTasks array
     removeTask: (state, action) => {

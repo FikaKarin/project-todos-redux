@@ -75,10 +75,9 @@ export const TaskList = () => {
         }, 3000);
       }
     } else {
-      // Handle the case where chosenToday is undefined
       console.error('chosenToday is undefined');
     }
-  };
+  };  
 
   // Function to handle task removal
   const handleRemoveTask = (taskId) => {

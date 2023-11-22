@@ -1,45 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
-  toggleTaskCompletion,
+  toggleTaskChosen,
   removeTask,
   undoRemoveTask,
   startNewDay,
 } from '../../reducers/tasks';
 import { TaskListHeader } from '../TaskListHeader/TaskListHeader';
 import { TaskListFilters } from '../TaskListFilter/TaskListFilters';
-import { NewTaskDueDate } from '../NewTaskDueDate/NewTaskDueDate';
 import { TaskListItem } from '../TaskListItem/TaskListItem';
 
 // Define the TaskList component
 export const TaskList = () => {
   // Retrieve necessary data from Redux store using useSelector
   const allTasks = useSelector((state) => state.tasks.allTasks);
-  const completedToday = useSelector((state) => state.tasks.completedToday);
+  const chosenToday = useSelector((state) => state.tasks.chosenTasks);
   const removedTasks = useSelector((state) => state.tasks.removedTasks);
   const dispatch = useDispatch();
   const [dailyLimitReached, setDailyLimitReached] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(getTimeRemaining());
   const [newTask, setNewTask] = useState({ text: '', dueDate: null });
-  const [showCompleted, setShowCompleted] = useState(true);
-  const [showUncompleted, setShowUncompleted] = useState(true);
+  const [showChosen, setShowChosen] = useState(true);
+  const [showUnchosen, setShowUnchosen] = useState(true);
   const [createdAfterDate, setCreatedAfterDate] = useState(null);
   const [sortByDueDate, setSortByDueDate] = useState(false);
 
   // useEffect: Load state from localStorage when the component mounts
   useEffect(() => {
-    const savedState = localStorage.getItem('completedTasks');
+    const savedState = localStorage.getItem('chosenTasks');
     if (savedState) {
       dispatch({
-        type: 'LOAD_COMPLETED_TASKS',
+        type: 'LOAD_CHOSEN_TASKS',
         payload: JSON.parse(savedState),
       });
     }
   }, [dispatch]);
 
-  // useEffect: Save completed tasks to localStorage whenever it changes
+  // useEffect: Save chosen tasks to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('completedTasks', JSON.stringify(allTasks));
+    localStorage.setItem('chosenTasks', JSON.stringify(allTasks));
   }, [allTasks]);
 
   // useEffect: Update the time remaining every second
@@ -65,14 +64,19 @@ export const TaskList = () => {
   }, []);
 
   // Function to handle task completion toggling
-  const handleToggleCompletion = (taskId) => {
-    if (completedToday.length < 3) {
-      dispatch(toggleTaskCompletion(taskId));
+  const handleToggleChosen = (taskId) => {
+    if (chosenToday) {
+      if (chosenToday.length < 3) {
+        dispatch(toggleTaskChosen(taskId));
+      } else {
+        setDailyLimitReached(true);
+        setTimeout(() => {
+          setDailyLimitReached(false);
+        }, 3000);
+      }
     } else {
-      setDailyLimitReached(true);
-      setTimeout(() => {
-        setDailyLimitReached(false);
-      }, 3000);
+      // Handle the case where chosenToday is undefined
+      console.error('chosenToday is undefined');
     }
   };
 
@@ -104,23 +108,22 @@ export const TaskList = () => {
   return (
     <div>
       <TaskListHeader
-        completedToday={completedToday}
         dailyLimitReached={dailyLimitReached}
         timeRemaining={timeRemaining}
+        chosenToday={chosenToday}
       />
       <TaskListFilters
-        showCompleted={showCompleted}
-        showUncompleted={showUncompleted}
-        setShowCompleted={setShowCompleted}
-        setShowUncompleted={setShowUncompleted}
+        showChosen={showChosen}
+        showUnchosen={showUnchosen}
+        setShowChosen={setShowChosen}
+        setShowUnchosen={setShowUnchosen}
         setSortByDueDate={setSortByDueDate} // Pass this prop
       />
       <ul>
         {allTasks
           .filter(
             (task) =>
-              (showCompleted && task.completed) ||
-              (showUncompleted && !task.completed)
+              (showChosen && task.chosen) || (showUnchosen && !task.chosen)
           )
           .filter(
             (task) =>
@@ -137,7 +140,7 @@ export const TaskList = () => {
             <TaskListItem
               key={task.id}
               task={task}
-              handleToggleCompletion={handleToggleCompletion}
+              handleToggleChosen={handleToggleChosen}
               handleRemoveTask={handleRemoveTask}
               handleUndoRemoveTask={handleUndoRemoveTask}
             />

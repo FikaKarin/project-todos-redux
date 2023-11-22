@@ -7,13 +7,15 @@ export const CompletedTaskList = () => {
   return (
     <div>
       <h2>Completed Tasks</h2>
-      <ul>
-        {completedTasks.map((task) => (
-          <li key={task.id}>
-            {task.text}
-          </li>
-        ))}
-      </ul>
+      {completedTasks && completedTasks.length > 0 ? (
+        <ul>
+          {completedTasks.map((task) => (
+            <li key={task.id}>{task.text}</li>
+          ))}
+        </ul>
+      ) : (
+        <p>No completed tasks yet.</p>
+      )}
     </div>
   );
 };

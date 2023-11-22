@@ -4,7 +4,7 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import tasksReducer from './reducers/tasks';
 import { TaskList } from './components/TaskList/TaskList';
 import { TaskForm } from './components/Taskform/TaskForm';
-import { CompletedTaskList } from './components/CompletedTaskList/CompletedTaskList';
+import { CompletedTaskList } from './components/ChosenTaskList/ChosenTaskList';
 
 const reducer = combineReducers({
   tasks: tasksReducer,

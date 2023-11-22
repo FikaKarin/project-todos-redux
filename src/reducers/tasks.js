@@ -11,10 +11,10 @@ export const tasksSlice = createSlice({
       createdAt: new Date().toISOString(), // Convert to string
       dueDate: null,
     })),
-    completedTasks: [],
+    chosenTasks: [], // Updated from chosenTasks
     removedTasks: [],
     dailyTaskLimit: 3,
-    completedToday: [], // Added completedToday array
+    chosenToday: [], // Make sure this is present
   },
   reducers: {
     // Add a new task to the allTasks array
@@ -23,7 +23,7 @@ export const tasksSlice = createSlice({
       const newTask = {
         id: Date.now(),
         text,
-        completed: false,
+        chosen: false,
         createdAt: new Date().toISOString(), // Convert to a string
         dueDate,
       };
@@ -37,7 +37,7 @@ export const tasksSlice = createSlice({
       state.allTasks = state.allTasks.filter(
         (task) => task.id !== action.payload
       );
-      state.completedTasks = state.completedTasks.filter(
+      state.chosenTasks = state.chosenTasks.filter(
         (task) => task.id !== action.payload
       );
       state.removedTasks.push(removedTask);
@@ -49,34 +49,33 @@ export const tasksSlice = createSlice({
         state.allTasks.push(lastRemovedTask);
       }
     },
-    // Toggle the completion status of a task
-    toggleTaskCompletion: (state, action) => {
-      const taskId = action.payload;
-      const task = state.allTasks.find((task) => task.id === taskId);
-
-      if (task) {
-        if (task.completed) {
-          state.completedTasks = state.completedTasks.filter(
-            (task) => task.id !== taskId
-          );
-        } else {
-          // Check if the dailyTaskLimit has been reached
-          if (state.completedToday.length < state.dailyTaskLimit) {
-            state.completedTasks.push(task);
-            state.completedToday.push(task.id);
+    // Toggle the chosen status of a task
+    toggleTaskChosen: (state, action) => {
+        const taskId = action.payload;
+        const task = state.allTasks.find((task) => task.id === taskId);
+  
+        if (task) {
+          if (task.chosen) {
+            state.chosenTasks = state.chosenTasks.filter(
+              (task) => task.id !== taskId
+            );
           } else {
-            // Optionally, you could handle exceeding the dailyTaskLimit here
-            console.warn('Daily task limit reached!');
+            // Check if the dailyTaskLimit has been reached
+            if (state.chosenToday.length < state.dailyTaskLimit) {
+              state.chosenTasks.push(task);
+              state.chosenToday.push(task.id);
+            } else {
+              console.warn('Daily task limit reached!');
+            }
           }
+          task.chosen = !task.chosen; // Updated from chosen
         }
-        task.completed = !task.completed;
-      }
-    },
-    // Start a new day by resetting completedToday array and unchecking all completed tasks
+      },
+    // Start a new day by resetting chosenToday array and unchecking all chosen tasks
     startNewDay: (state) => {
-      state.completedToday = [];
+      state.chosenToday = [];
       state.allTasks.forEach((task) => {
-        task.completed = false;
+        task.chosen = false;
       });
     },
   },
@@ -87,7 +86,7 @@ export const {
   addTask,
   removeTask,
   undoRemoveTask,
-  toggleTaskCompletion,
+  toggleTaskChosen,
   startNewDay,
 } = tasksSlice.actions;
 

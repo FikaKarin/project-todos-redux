@@ -1,26 +1,27 @@
 export const TaskListFilters = ({
-  showCompleted,
+  showChosen,
   showUncompleted,
-  setShowCompleted,
-  setShowUncompleted,
+  setShowChosen,
+  showUnchosen,
+  setShowUnchosen,
   sortByDueDate, // Use the correct prop name
   setSortByDueDate,
 }) => (
   <div>
     <label>
-      Show Completed:
+      Show Selected:
       <input
         type='checkbox'
-        checked={showCompleted}
-        onChange={() => setShowCompleted(!showCompleted)}
+        checked={showChosen}
+        onChange={() => setShowChosen(!showChosen)}
       />
     </label>
     <label>
-      Show Uncompleted:
+      Show Unselected:
       <input
         type='checkbox'
         checked={showUncompleted}
-        onChange={() => setShowUncompleted(!showUncompleted)}
+        onChange={() => setShowUnchosen(!showUnchosen)}
       />
     </label>
     <label>

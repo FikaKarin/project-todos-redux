@@ -1,25 +1,17 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { completeTask } from '../../reducers/tasks';
+import { useSelector } from 'react-redux';
 
 export const ChosenTaskList = () => {
   const chosenTasks = useSelector((state) => state.tasks.chosenTasks);
-  const dispatch = useDispatch();
-
-  const handleCompleteTask = (taskId) => {
-    dispatch(completeTask({ taskId }));
-  };
+  const chosenTaskCount = chosenTasks ? chosenTasks.length : 0;
 
   return (
     <div>
-      <h2>Chosen Tasks</h2>
+      <h2>Chosen Tasks ({chosenTaskCount})</h2>
       {chosenTasks && chosenTasks.length > 0 ? (
         <ul>
           {chosenTasks.map((task) => (
-            <li key={task.id}>
-              {task.text}{' '}
-              <button onClick={() => handleCompleteTask(task.id)}>Completed</button>
-            </li>
+            <li key={task.id}>{task.text}</li>
           ))}
         </ul>
       ) : (

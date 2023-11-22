@@ -77,7 +77,7 @@ export const TaskList = () => {
     } else {
       console.error('chosenToday is undefined');
     }
-  };  
+  };
 
   // Function to handle task removal
   const handleRemoveTask = (taskId) => {
@@ -107,6 +107,8 @@ export const TaskList = () => {
   return (
     <div>
       <TaskListHeader
+        title='All Tasks'
+        count={allTasks.length}
         dailyLimitReached={dailyLimitReached}
         timeRemaining={timeRemaining}
         chosenToday={chosenToday}

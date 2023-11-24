@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addTask } from '../../reducers/tasks';
+import styled from 'styled-components';
 
 export const TaskForm = () => {
   const dispatch = useDispatch();
   const [newTask, setNewTask] = useState('');
-  const [dueDate, setDueDate] = useState(''); // Initialize with an empty string
+  const [dueDate, setDueDate] = useState('');
 
   const handleAddTask = () => {
     if (newTask.trim() !== '') {
-      dispatch(addTask({ id: Date.now(), text: newTask, completed: false, dueDate }));
+      dispatch(
+        addTask({ id: Date.now(), text: newTask, completed: false, dueDate })
+      );
       setNewTask('');
-      setDueDate(''); // Clear due date after adding the task
+      setDueDate('');
     }
   };
 
   return (
-    <div>
+    <TaskFormWrapper>
       <h2>Add Task</h2>
       <input
         type='text'
@@ -32,7 +35,61 @@ export const TaskForm = () => {
           onChange={(e) => setDueDate(e.target.value)}
         />
       </label>
-      <button onClick={handleAddTask}>Add Task</button>
-    </div>
+      <ButtonContainer>
+        <Button onClick={handleAddTask}>Add Task</Button>
+      </ButtonContainer>
+    </TaskFormWrapper>
   );
 };
+
+const TaskFormWrapper = styled.div`
+  margin-bottom: 20px;
+  background-color: #ede69e86;
+  padding: 6px 8px;
+  border-radius: 8px;
+  box-shadow: 2px 2px 2px grey;
+  display: flex;
+  flex-direction: column;
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+
+  input {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: 'Helvetica', sans-serif;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 8px;
+  }
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+`;
+
+const Button = styled.button`
+  padding: 8px 16px;
+  background-image: linear-gradient(to right, #05a405b8 30%, #085b08df 80%);
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: 'Helvetica', sans-serif;
+  box-shadow: 2px 2px 4px black;
+  font-weight: 600;
+
+  &:hover {
+    background-color: #45a049;
+    padding: 10px 18px;
+    transition: ease-in 0.3s;
+  }
+`;

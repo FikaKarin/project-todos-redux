@@ -1,15 +1,18 @@
+import React from 'react';
+import styled from 'styled-components';
+
 export const TaskListFilters = ({
   showChosen,
   showUncompleted,
   setShowChosen,
   showUnchosen,
   setShowUnchosen,
-  sortByDueDate, // Use the correct prop name
+  sortByDueDate,
   setSortByDueDate,
 }) => (
-  <div>
+  <TaskListFiltersWrapper>
     <label>
-      Show Selected:
+      Selected:
       <input
         type='checkbox'
         checked={showChosen}
@@ -17,7 +20,7 @@ export const TaskListFilters = ({
       />
     </label>
     <label>
-      Show Unselected:
+      Unselected:
       <input
         type='checkbox'
         checked={showUncompleted}
@@ -25,12 +28,28 @@ export const TaskListFilters = ({
       />
     </label>
     <label>
-      Sort by Due Date:
+      Due Date:
       <input
         type='checkbox'
         checked={sortByDueDate} 
         onChange={() => setSortByDueDate(!sortByDueDate)}
       />
     </label>
-  </div>
+  </TaskListFiltersWrapper>
 );
+
+const TaskListFiltersWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+
+  label {
+    margin: 16px 0px;
+    font-size: 0.8rem;
+
+    input {
+      margin-right: 5px;
+    }
+  }
+`;
+

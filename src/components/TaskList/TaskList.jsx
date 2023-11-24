@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import styled from 'styled-components';
 import {
   toggleTaskChosen,
   removeTask,
   undoRemoveTask,
   startNewDay,
 } from '../../reducers/tasks';
+
 import { TaskListHeader } from '../TaskListHeader/TaskListHeader';
 import { TaskListFilters } from '../TaskListFilter/TaskListFilters';
 import { TaskListItem } from '../TaskListItem/TaskListItem';
 
-// Define the TaskList component
 export const TaskList = () => {
-  // Retrieve necessary data from Redux store using useSelector
   const allTasks = useSelector((state) => state.tasks.allTasks);
   const chosenToday = useSelector((state) => state.tasks.chosenTasks);
   const removedTasks = useSelector((state) => state.tasks.removedTasks);
@@ -25,7 +25,6 @@ export const TaskList = () => {
   const [createdAfterDate, setCreatedAfterDate] = useState(null);
   const [sortByDueDate, setSortByDueDate] = useState(false);
 
-  // useEffect: Load state from localStorage when the component mounts
   useEffect(() => {
     const savedState = localStorage.getItem('chosenTasks');
     if (savedState) {
@@ -36,12 +35,10 @@ export const TaskList = () => {
     }
   }, [dispatch]);
 
-  // useEffect: Save chosen tasks to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem('chosenTasks', JSON.stringify(allTasks));
   }, [allTasks]);
 
-  // useEffect: Update the time remaining every second
   useEffect(() => {
     const intervalId = setInterval(() => {
       const now = new Date();
@@ -54,7 +51,6 @@ export const TaskList = () => {
     return () => clearInterval(intervalId);
   }, [dispatch]);
 
-  // useEffect: Clear the timer interval to avoid memory leaks
   useEffect(() => {
     const timerId = setInterval(() => {
       setTimeRemaining(getTimeRemaining());
@@ -63,7 +59,6 @@ export const TaskList = () => {
     return () => clearInterval(timerId);
   }, []);
 
-  // Function to handle task completion toggling
   const handleToggleChosen = (taskId) => {
     if (chosenToday) {
       if (chosenToday.length < 3) {
@@ -79,21 +74,18 @@ export const TaskList = () => {
     }
   };
 
-  // Function to handle task removal
   const handleRemoveTask = (taskId) => {
     dispatch(removeTask(taskId));
   };
 
-  // Function to handle undoing task removal
   const handleUndoRemoveTask = () => {
     dispatch(undoRemoveTask());
   };
 
-  // Function to calculate time remaining until the end of the day
   function getTimeRemaining() {
     const now = new Date();
     const endOfDay = new Date(now);
-    endOfDay.setHours(23, 59, 59, 999); // Set to the end of the current day
+    endOfDay.setHours(23, 59, 59, 999);
 
     const timeDiff = endOfDay - now;
     const hours = Math.floor(timeDiff / (1000 * 60 * 60));
@@ -103,9 +95,8 @@ export const TaskList = () => {
     return { hours, minutes, seconds };
   }
 
-  // JSX: Render the TaskList component
   return (
-    <div>
+    <TaskListWrapper>
       <TaskListHeader
         title='All Tasks'
         count={allTasks.length}
@@ -118,7 +109,7 @@ export const TaskList = () => {
         showUnchosen={showUnchosen}
         setShowChosen={setShowChosen}
         setShowUnchosen={setShowUnchosen}
-        setSortByDueDate={setSortByDueDate} // Pass this prop
+        setSortByDueDate={setSortByDueDate}
       />
       <ul>
         {allTasks
@@ -132,9 +123,9 @@ export const TaskList = () => {
           )
           .sort((a, b) => {
             if (sortByDueDate) {
-              return a.dueDate - b.dueDate; // Assuming dueDate is a Date object
+              return a.dueDate - b.dueDate;
             } else {
-              return 0; // No sorting by due date
+              return 0;
             }
           })
           .map((task) => (
@@ -160,6 +151,62 @@ export const TaskList = () => {
           </ul>
         </div>
       )}
-    </div>
+    </TaskListWrapper>
   );
 };
+
+const TaskListWrapper = styled.div`
+  margin: 0 auto;
+  width: 100%;
+
+  ul {
+    list-style: none;
+    padding: 0px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  li {
+    width: 90%;
+    box-sizing: border-box; /* Include padding and border in the element's total width */
+    margin-bottom: 20px;
+    border-radius: 4px;
+    font-family: 'Helvetica', sans-serif;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    input {
+      margin-right: 8px;
+    }
+
+    label {
+      font-weight: 600;
+    }
+
+    p {
+      font-size: 0.8rem;
+      color: black;
+    }
+
+    button {
+      margin-left: 8px;
+      background-color: #ff5757;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Helvetica', sans-serif;
+
+      &:hover {
+        background-color: #d14848;
+      }
+    }
+  }
+
+  h2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
+`;

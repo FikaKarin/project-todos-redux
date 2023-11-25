@@ -173,9 +173,13 @@ export const tasksSlice = createSlice({
     startNewDay: (state) => {
       state.chosenToday = [];
       state.allTasks.forEach((task) => {
-        task.chosen = false;
+        const taskCreationDay = new Date(task.createdAt).getDay();
+        const currentDay = new Date().getDay();
+        if (taskCreationDay === currentDay) {
+          task.chosen = false;
+        }
       });
-    },
+    },    
   },
 });
 

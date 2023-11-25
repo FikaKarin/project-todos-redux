@@ -73,7 +73,6 @@ const TaskListItemWrapper = styled.div`
     display: flex;
     flex-direction: column; /* Change to column */
     align-items: stretch; /* Align items in a column */
-
     margin-bottom: 10px;
     padding: 8px;
     border-bottom: 1px solid black;
@@ -106,6 +105,11 @@ const TaskListItemWrapper = styled.div`
       &:hover {
         text-decoration: underline;
       }
+    }
+  }
+  @media (max-width: 420px) {
+    li {
+      padding: 0;
     }
   }
 

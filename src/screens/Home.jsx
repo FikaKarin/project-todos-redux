@@ -40,4 +40,9 @@ const HomeWrapper = styled.div`
   margin: 0 auto;
   max-width: 900px;
   padding: 8px;
+
+  @media (max-width: 280px) {
+  background-image: none;
+  padding: 0;
+}
 `;

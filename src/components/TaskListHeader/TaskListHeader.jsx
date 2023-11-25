@@ -25,13 +25,18 @@ const TaskListHeaderWrapper = styled.div`
   }
 
   .time {
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     font-weight: 600;
     margin-bottom: 5px;
   }
 
   .error-message {
     color: red;
+  }
+  @media (max-width: 420px) {
+    h2, p {
+      font-size: 95%;
+    }
   }
 `;
 

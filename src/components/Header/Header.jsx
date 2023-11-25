@@ -4,7 +4,7 @@ import styled from 'styled-components';
 export const Header = () => {
   return (
     <HeaderWrapper>
-      <h1>Make Time - Todo List App</h1>
+      <h1>Make Time - To Calm Down</h1>
     </HeaderWrapper>
   );
 };

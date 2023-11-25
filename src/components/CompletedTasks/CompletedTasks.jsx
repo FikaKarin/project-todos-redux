@@ -81,6 +81,11 @@ const CompletedTaskListWrapper = styled.div`
     flex-direction: column;
     align-items: flex-start;
   }
+  @media (max-width: 420px) {
+    h2, p {
+      font-size:85%;
+    }
+  }
 `;
 
 const CompletedTaskText = styled.span`

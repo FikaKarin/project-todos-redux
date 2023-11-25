@@ -9,7 +9,6 @@ import {
 } from '../../reducers/tasks';
 
 import { TaskListHeader } from '../TaskListHeader/TaskListHeader';
-import { TaskListFilters } from '../TaskListFilter/TaskListFilters';
 import { TaskListItem } from '../TaskListItem/TaskListItem';
 import { FaUndo } from 'react-icons/fa';
 
@@ -21,10 +20,10 @@ export const TaskList = () => {
   const [dailyLimitReached, setDailyLimitReached] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(getTimeRemaining());
   const [newTask, setNewTask] = useState({ text: '', dueDate: null });
-  const [showChosen, setShowChosen] = useState(true);
+  const [showChosen, setShowChosen] = useState(false); 
   const [showUnchosen, setShowUnchosen] = useState(true);
+  const [showAll, setShowAll] = useState(true); // Initialize to true
   const [createdAfterDate, setCreatedAfterDate] = useState(null);
-  const [sortByDueDate, setSortByDueDate] = useState(false);
 
   useEffect(() => {
     const savedState = localStorage.getItem('chosenTasks');
@@ -61,7 +60,11 @@ export const TaskList = () => {
   }, []);
 
   const handleToggleChosen = (taskId) => {
+    console.log('chosenToday:', chosenToday);
+
     if (chosenToday) {
+      console.log('chosenToday.length:', chosenToday.length);
+
       if (chosenToday.length < 3) {
         dispatch(toggleTaskChosen(taskId));
       } else {
@@ -105,30 +108,17 @@ export const TaskList = () => {
         timeRemaining={timeRemaining}
         chosenToday={chosenToday}
       />
-      <TaskListFilters
-        showChosen={showChosen}
-        showUnchosen={showUnchosen}
-        setShowChosen={setShowChosen}
-        setShowUnchosen={setShowUnchosen}
-        setSortByDueDate={setSortByDueDate}
-      />
       <ul>
         {allTasks
           .filter(
             (task) =>
-              (showChosen && task.chosen) || (showUnchosen && !task.chosen)
+              (showAll || (!showChosen && !task.chosen) || (showChosen && task.chosen)) &&
+              (showAll || (!showUnchosen && task.chosen) || (showUnchosen && !task.chosen))
           )
           .filter(
             (task) =>
               !createdAfterDate || new Date(task.createdAt) > createdAfterDate
           )
-          .sort((a, b) => {
-            if (sortByDueDate) {
-              return a.dueDate - b.dueDate;
-            } else {
-              return 0;
-            }
-          })
           .map((task) => (
             <TaskListItem
               key={task.id}
@@ -168,7 +158,7 @@ const TaskListWrapper = styled.div`
   }
 
   li {
-    width: 90%;
+    width: 100%;
     box-sizing: border-box; /* Include padding and border in the element's total width */
     margin-bottom: 20px;
     font-family: 'Helvetica', sans-serif;
@@ -196,6 +186,11 @@ const TaskListWrapper = styled.div`
     font-weight: 200;
     margin-bottom: 10px;
   }
+  @media (max-width: 420px) {
+    h2, p {
+      font-size: 95%;
+    }
+  }
 `;
 const StyledRemovedTaskList = styled.ul`
   list-style: none;
@@ -211,7 +206,7 @@ const RemovedTaskText = styled.p`
 `;
 
 const FaUndoButton = styled(FaUndo)`
-  display:flex;
+  display: flex;
   color: black;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   padding: 8px; // Adjusted padding
@@ -228,3 +223,4 @@ const FaUndoButton = styled(FaUndo)`
     transition: ease-in 0.3s;
   }
 `;
+

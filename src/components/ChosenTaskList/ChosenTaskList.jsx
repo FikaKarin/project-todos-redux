@@ -29,7 +29,7 @@ export const ChosenTaskList = () => {
                 style={{
                   color: 'green',
                   boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
-                  padding: '8px', // Adjusted padding
+                  padding: '6px', // Adjusted padding
                   borderRadius: '4px',
                   cursor: 'pointer',
                   fontSize: '33px', // Increased font size
@@ -93,6 +93,11 @@ const ChosenTaskListWrapper = styled.div`
     border-right: 1px solid #0000003b;
     padding: 10px 4px;
     margin-bottom: 6px;
+  }
+  @media (max-width: 420px) {
+    h2, p {
+      font-size: 95%;
+    }
   }
 `;
 

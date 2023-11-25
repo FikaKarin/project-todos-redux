@@ -6,7 +6,6 @@ export const TaskListItem = ({
   task,
   handleToggleChosen,
   handleRemoveTask,
-  handleUndoRemoveTask,
 }) => {
   // Add the formatDate function directly here
   const formatDate = (dateTimeString) => {
@@ -45,7 +44,6 @@ export const TaskListItem = ({
           )}
         </div>
         <div className='action-buttons'>
-   
           <FaTrash
             style={{
               color: 'red',
@@ -78,7 +76,16 @@ const TaskListItemWrapper = styled.div`
     border-bottom: 1px solid black;
     border-right: 1px solid #0000003b;
     font-family: 'Helvetica', sans-serif;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in;
 
+    &:hover {
+      transform: scale(1.05);
+    }
+
+    &.added-to-list {
+      opacity: 0;
+      transform: translateY(20px);
+    }
     &:last-child {
       margin-bottom: 0;
     }

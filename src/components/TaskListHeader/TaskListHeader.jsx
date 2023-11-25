@@ -7,7 +7,7 @@ export const TaskListHeader = ({ title, count, chosenToday, dailyLimitReached, t
     <p>{chosenToday ? `${chosenToday.length}/3` : '0/3'} tasks chosen today</p>
     {dailyLimitReached && (
       <p className="error-message">
-        Don't stress trying to un-stress. 3 tasks a day is enough to make a difference
+        Don't stress trying to de-stress. 3 tasks a day is enough to make a difference
       </p>
     )}
     <p className='time'>

@@ -20,9 +20,9 @@ export const TaskList = () => {
   const [dailyLimitReached, setDailyLimitReached] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(getTimeRemaining());
   const [newTask, setNewTask] = useState({ text: '', dueDate: null });
-  const [showChosen, setShowChosen] = useState(false); 
+  const [showChosen, setShowChosen] = useState(false);
   const [showUnchosen, setShowUnchosen] = useState(true);
-  const [showAll, setShowAll] = useState(true); // Initialize to true
+  const [showAll, setShowAll] = useState(true);
   const [createdAfterDate, setCreatedAfterDate] = useState(null);
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export const TaskList = () => {
         setDailyLimitReached(true);
         setTimeout(() => {
           setDailyLimitReached(false);
-        }, 8000);
+        }, 15000);
       }
     } else {
       console.error('chosenToday is undefined');
@@ -110,10 +110,16 @@ export const TaskList = () => {
       />
       <ul>
         {allTasks
+          .slice() // create a copy of the array
+          .reverse() // reverse the order
           .filter(
             (task) =>
-              (showAll || (!showChosen && !task.chosen) || (showChosen && task.chosen)) &&
-              (showAll || (!showUnchosen && task.chosen) || (showUnchosen && !task.chosen))
+              (showAll ||
+                (!showChosen && !task.chosen) ||
+                (showChosen && task.chosen)) &&
+              (showAll ||
+                (!showUnchosen && task.chosen) ||
+                (showUnchosen && !task.chosen))
           )
           .filter(
             (task) =>
@@ -121,7 +127,7 @@ export const TaskList = () => {
           )
           .map((task) => (
             <TaskListItem
-              key={task.id}
+              key={`${task.id}-${task.text}`} // Combine id and text for a more unique key
               task={task}
               handleToggleChosen={handleToggleChosen}
               handleRemoveTask={handleRemoveTask}
@@ -187,7 +193,8 @@ const TaskListWrapper = styled.div`
     margin-bottom: 10px;
   }
   @media (max-width: 420px) {
-    h2, p {
+    h2,
+    p {
       font-size: 95%;
     }
   }
@@ -223,4 +230,3 @@ const FaUndoButton = styled(FaUndo)`
     transition: ease-in 0.3s;
   }
 `;
-

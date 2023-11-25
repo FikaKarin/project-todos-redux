@@ -12,12 +12,6 @@
     "readMoreLink": "https://www.healthline.com/health/health-benefits-of-being-outdoors"
   },
   {
-    "id": 3,
-    "text": "Write down three things you're grateful for today.",
-    "completed": false,
-    "readMoreLink": "https://www.inc.com/jessica-stillman/the-amazing-way-gratitude-rewires-your-brain-for-happiness.html"
-  },
-  {
     "id": 4,
     "text": "Stretch your arms and legs for 5 minutes.",
     "completed": false,
@@ -30,75 +24,9 @@
     "readMoreLink": "https://www.renaissance.com/2018/01/23/blog-magic-15-minutes-reading-practice-reading-growth/"
   },
   {
-    "id": 6,
-    "text": "Make a home-cooked meal.",
-    "completed": false,
-    "readMoreLink": "https://blog.dana-farber.org/insight/2020/04/how-cooking-can-help-relieve-stress/"
-  },
-  {
     "id": 7,
     "text": "Practice mindfulness meditation for 10 minutes.",
     "completed": false,
     "readMoreLink": "https://theconversation.com/mindfulness-meditation-ten-minutes-a-day-improves-cognitive-function-103386"
-  },
-  {
-    "id": 8,
-    "text": "Listen to a podcast on a topic you're curious about.",
-    "completed": false,
-    "readMoreLink": "https://wavve.co/benefits-of-listening-to-podcasts-you-need-to-check-out/"
-  },
-  {
-    "id": 9,
-    "text": "Do a quick home workout or yoga session.",
-    "completed": false,
-    "readMoreLink": "https://www.ekhartyoga.com/articles/practice/is-20-minutes-of-yoga-enough"
-  },
-  {
-    "id": 10,
-    "text": "Learn a new skill or hobby for 30 minutes.",
-    "completed": false,
-    "readMoreLink": "https://www.cloverhealth.com/en/blog/how-learning-a-new-hobby-can-boost-brain-health"
-  },
-  {
-    "id": 11,
-    "text": "Disconnect from screens for an hour and engage in an analog activity.",
-    "completed": false,
-    "readMoreLink": "https://fastercapital.com/content/Digital-Detox--Awayfromhome--Disconnecting-to-Reconnect-with-Yourself.html"
-  },
-  {
-    "id": 12,
-    "text": "Organize a small area in your home or workspace.",
-    "completed": false,
-    "readMoreLink": "https://www.workplaceoptions.com/mental-health-benefits-of-staying-organized/"
-  },
-  {
-    "id": 13,
-    "text": "Call or video chat with a friend or family member.",
-    "completed": false,
-    "readMoreLink": "https://cubo.to/blog/the-impact-of-instant-video-calls-on-relationships-and-communication"
-  },
-  {
-    "id": 14,
-    "text": "Plan and prepare a healthy meal for yourself.",
-    "completed": false,
-    "readMoreLink": "https://www.helpguide.org/articles/healthy-eating/cooking-for-one.htm"
-  },
-  {
-    "id": 16,
-    "text": "Create a playlist of your favorite music for relaxation.",
-    "completed": false,
-    "readMoreLink": "https://psychcentral.com/stress/the-power-of-music-to-reduce-stress"
-  },
-  {
-    "id": 18,
-    "text": "Explore a nearby park or nature reserve.",
-    "completed": false,
-    "readMoreLink": "https://www.travelandleisure.com/trip-ideas/yoga-wellness/living-near-protected-lands-national-parks-better-for-health-wealth"
-  },
-  {
-    "id": 19,
-    "text": "Watch a documentary on a topic you find interesting.",
-    "completed": false,
-    "readMoreLink": "https://www.nostairway.com/the-benefits-of-watching-documentaries-2023/"
   }
 ]

@@ -35,13 +35,13 @@ export const CompletedTaskList = () => {
             <p>Completed on: {formatDate(task.completedAt)}</p>
             <FaUndo
               style={{
-                color:'black',
+                color: 'black',
                 boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)',
                 padding: '4px 8px',
                 borderRadius: '4px',
                 cursor: 'pointer',
                 fontSize: '33px',
-                alignSelf: 'flex-end', /* Align to the right */
+                alignSelf: 'flex-end' /* Align to the right */,
                 fontWeight: '600',
                 marginLeft: '8px',
               }}
@@ -80,10 +80,21 @@ const CompletedTaskListWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
+    transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+
+    &.added-to-list {
+      opacity: 0;
+      transform: translateY(20px);
+    }
   }
   @media (max-width: 420px) {
-    h2, p {
-      font-size:85%;
+    h2,
+    p {
+      font-size: 85%;
     }
   }
 `;
@@ -92,25 +103,4 @@ const CompletedTaskText = styled.span`
   margin-bottom: 8px;
   text-decoration: line-through; /* Apply strikethrough to completed tasks */
   color: #888; /* Adjust color for completed tasks */
-`;
-
-const UndoCompletionButton = styled.button`
-  background: linear-gradient(to right, #ffc107, #a67e06); /* Gradient colors */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Box shadow */
-  color: #212529; /* Adjust text color for the undo completion button */
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  padding: 4px 8px;
-  font-family: 'Helvetica', sans-serif;
-  font-size: 10px;
-  align-self: flex-end; /* Align to the right */
-  color: white;
-  font-weight: 600;
-  box-shadow: 2px 2px 4px black;
-
-  &:hover {
-    padding: 10px 18px;
-    transition: ease-in 0.3s;
-  }
 `;

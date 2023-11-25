@@ -10,5 +10,7 @@ export const Header = () => {
 };
 
 const HeaderWrapper = styled.div`
-  
+  h1 {
+    font-weight: 200;
+  }
 `;

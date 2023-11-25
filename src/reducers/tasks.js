@@ -30,6 +30,23 @@ export const tasksSlice = createSlice({
       };
       state.allTasks.push(newTask);
     },
+    undoChosenTask: (state, action) => {
+      const { taskId } = action.payload;
+      const undoneTask = state.chosenTasks.find((task) => task.id === taskId);
+
+      if (undoneTask) {
+        // Remove the task from chosenTasks
+        state.chosenTasks = state.chosenTasks.filter(
+          (task) => task.id !== taskId
+        );
+
+        // Reset the chosen property
+        undoneTask.chosen = false;
+
+        // Add the undone task back to allTasks
+        state.allTasks.push(undoneTask);
+      }
+    },
     // Remove a task by its ID, move it to removedTasks array
     removeTask: (state, action) => {
       const removedTask = state.allTasks.find(
@@ -48,6 +65,38 @@ export const tasksSlice = createSlice({
       const lastRemovedTask = state.removedTasks.pop();
       if (lastRemovedTask) {
         state.allTasks.push(lastRemovedTask);
+
+        // Check if the undone task was chosen and remove it from chosenTasks
+        if (lastRemovedTask.chosen) {
+          state.chosenTasks = state.chosenTasks.filter(
+            (task) => task.id !== lastRemovedTask.id
+          );
+
+          // Also update the chosenToday array if needed
+          const index = state.chosenToday.indexOf(lastRemovedTask.id);
+          if (index !== -1) {
+            state.chosenToday.splice(index, 1);
+          }
+        }
+      }
+    },
+    undoRemoveTask: (state) => {
+      const lastRemovedTask = state.removedTasks.pop();
+      if (lastRemovedTask) {
+        state.allTasks.push(lastRemovedTask);
+
+        // Check if the undone task was chosen and remove it from chosenTasks
+        if (lastRemovedTask.chosen) {
+          state.chosenTasks = state.chosenTasks.filter(
+            (task) => task.id !== lastRemovedTask.id
+          );
+
+          // Also update the chosenToday array if needed
+          const index = state.chosenToday.indexOf(lastRemovedTask.id);
+          if (index !== -1) {
+            state.chosenToday.splice(index, 1);
+          }
+        }
       }
     },
     completeTask: (state, action) => {
@@ -62,13 +111,42 @@ export const tasksSlice = createSlice({
           (task) => task.id !== taskId
         );
 
-        // Add the completed task to completedTasks
-        state.completedTasks.push({
-          ...taskToComplete,
-          completedAt: new Date().toISOString(), // You can add a completed timestamp
-        });
+        // Check if the task was already completed
+        const alreadyCompleted =
+          state.completedTasks.findIndex((task) => task.id === taskId) !== -1;
+
+        if (!alreadyCompleted) {
+          // Add the completed task to completedTasks
+          state.completedTasks.push({
+            ...taskToComplete,
+            completedAt: new Date().toISOString(),
+          });
+        } else {
+          // If the task was already completed, move it back to chosenTasks
+          state.chosenTasks.push(taskToComplete);
+        }
       }
     },
+    undoCompleteTask: (state, action) => {
+      const { taskId } = action.payload;
+      const undoneTask = state.completedTasks.find(
+        (task) => task.id === taskId
+      );
+
+      if (undoneTask) {
+        // Remove the task from completedTasks
+        state.completedTasks = state.completedTasks.filter(
+          (task) => task.id !== taskId
+        );
+
+        // Reset the completedAt timestamp
+        undoneTask.completedAt = null;
+
+        // Add the undone task back to chosenTasks
+        state.chosenTasks.push(undoneTask);
+      }
+    },
+
     // Toggle the chosen status of a task
     toggleTaskChosen: (state, action) => {
       const taskId = action.payload;
@@ -108,7 +186,9 @@ export const {
   undoRemoveTask,
   toggleTaskChosen,
   startNewDay,
-  completeTask
+  completeTask,
+  undoCompleteTask,
+  undoChosenTask,
 } = tasksSlice.actions;
 
 // Export reducer

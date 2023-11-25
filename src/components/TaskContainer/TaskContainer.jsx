@@ -5,7 +5,6 @@ import { combineReducers, configureStore } from '@reduxjs/toolkit';
 import styled from 'styled-components';
 import tasksReducer from '../../reducers/tasks';
 import { TaskList } from '../../components/TaskList/TaskList';
-import { TaskForm } from '../../components/Taskform/TaskForm';
 import { ChosenTaskList } from '../../components/ChosenTaskList/ChosenTaskList';
 import { CompletedTaskList } from '../../components/CompletedTasks/CompletedTasks';
 
@@ -35,7 +34,7 @@ const TaskContainerWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between; // Adjust as needed
-  background-image: linear-gradient(to right, #f5f5dcb9 50%, #63bc63a7 80%);
+  background-image: linear-gradient(to right, #f5f5dcd1 50%, #63bc63d8 80%);
   padding-left: 16px;
   border-radius: 16px;
   box-shadow: 2px 2px 4px black;

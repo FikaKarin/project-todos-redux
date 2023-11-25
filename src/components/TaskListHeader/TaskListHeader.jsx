@@ -21,6 +21,7 @@ const TaskListHeaderWrapper = styled.div`
   h2 {
     font-size: 1.5rem;
     margin-bottom: 10px;
+    font-weight: 200;
   }
 
   .time {

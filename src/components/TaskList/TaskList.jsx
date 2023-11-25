@@ -11,6 +11,7 @@ import {
 import { TaskListHeader } from '../TaskListHeader/TaskListHeader';
 import { TaskListFilters } from '../TaskListFilter/TaskListFilters';
 import { TaskListItem } from '../TaskListItem/TaskListItem';
+import { FaUndo } from 'react-icons/fa';
 
 export const TaskList = () => {
   const allTasks = useSelector((state) => state.tasks.allTasks);
@@ -67,7 +68,7 @@ export const TaskList = () => {
         setDailyLimitReached(true);
         setTimeout(() => {
           setDailyLimitReached(false);
-        }, 3000);
+        }, 8000);
       }
     } else {
       console.error('chosenToday is undefined');
@@ -141,14 +142,14 @@ export const TaskList = () => {
       {removedTasks.length > 0 && (
         <div>
           <h2>Removed Tasks</h2>
-          <ul>
+          <StyledRemovedTaskList>
             {removedTasks.map((task) => (
               <li key={task.id}>
-                {task.text}{' '}
-                <button onClick={() => handleUndoRemoveTask()}>Undo</button>
+                <RemovedTaskText>{task.text}</RemovedTaskText>
+                <FaUndoButton onClick={handleUndoRemoveTask} />
               </li>
             ))}
-          </ul>
+          </StyledRemovedTaskList>
         </div>
       )}
     </TaskListWrapper>
@@ -170,7 +171,6 @@ const TaskListWrapper = styled.div`
     width: 90%;
     box-sizing: border-box; /* Include padding and border in the element's total width */
     margin-bottom: 20px;
-    border-radius: 4px;
     font-family: 'Helvetica', sans-serif;
 
     &:last-child {
@@ -189,24 +189,42 @@ const TaskListWrapper = styled.div`
       font-size: 0.8rem;
       color: black;
     }
-
-    button {
-      margin-left: 8px;
-      background-color: #ff5757;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-family: 'Helvetica', sans-serif;
-
-      &:hover {
-        background-color: #d14848;
-      }
-    }
   }
 
   h2 {
-    font-size: 1.5rem;
+    font-size: 1.2rem;
+    font-weight: 200;
     margin-bottom: 10px;
+  }
+`;
+const StyledRemovedTaskList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin-top: 10px;
+`;
+
+const RemovedTaskText = styled.p`
+  font-size: 0.8rem;
+  text-decoration: line-through;
+  color: #888;
+  margin-bottom: 5px;
+`;
+
+const FaUndoButton = styled(FaUndo)`
+  display:flex;
+  color: black;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 8px; // Adjusted padding
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 33px; // Increased font size
+  margin-left: auto; // Move to the right
+  margin-right: 8px; // Add some space between buttons
+  margin-top: 12px;
+  margin-bottom: 8px; // Add space between buttons and the bottom
+  transition: ease-in 0.3s;
+
+  &:hover {
+    transition: ease-in 0.3s;
   }
 `;

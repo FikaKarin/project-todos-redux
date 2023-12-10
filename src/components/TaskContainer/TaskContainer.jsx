@@ -34,7 +34,7 @@ const TaskContainerWrapper = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between; // Adjust as needed
-  background-image: linear-gradient(to right, #f5f5dcd1 50%, #63bc63d8 80%);
+  background-image: linear-gradient(to right, #f5f5dcd1 70%, #63bc63b9 90%);
   padding-left: 16px;
   border-radius: 16px;
   box-shadow: 2px 2px 4px black;

@@ -79,7 +79,7 @@ const ButtonContainer = styled.div`
 
 const Button = styled.button`
   padding: 8px 16px;
-  background-image: linear-gradient(to right, #05a405b8 30%, #085b08df 80%);
+  background-color: #00800081;
   color: white;
   border: none;
   border-radius: 4px;

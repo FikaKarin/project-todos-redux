@@ -49,7 +49,7 @@ const ChosenTaskListWrapper = styled.div`
     font-size: 1.2rem;
     margin-bottom: 10px;
     margin-bottom: 18px;
-    font-weight: 200;
+    font-weight: 400;
   }
 
   ul {

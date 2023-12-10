@@ -200,7 +200,7 @@ const TaskListWrapper = styled.div`
 
   h2 {
     font-size: 1.2rem;
-    font-weight: 200;
+    font-weight: 400;
     margin-bottom: 10px;
   }
   @media (max-width: 420px) {

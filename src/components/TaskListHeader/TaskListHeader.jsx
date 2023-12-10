@@ -19,15 +19,20 @@ export const TaskListHeader = ({ title, count, chosenToday, dailyLimitReached, t
 
 const TaskListHeaderWrapper = styled.div`
   h2 {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     margin-bottom: 10px;
-    font-weight: 200;
+    font-weight: 400;
   }
 
   .time {
     font-size: 0.8rem;
     font-weight: 600;
     margin-bottom: 5px;
+  }
+  p {
+    font-style: italic;
+    font-size: 0.9rem;
+    color: #0000b9;
   }
 
   .error-message {

@@ -1,6 +1,12 @@
-// Import createSlice function from Redux Toolkit and tasksData from tasks.json
-import { createSlice } from '@reduxjs/toolkit';
+import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { v4 as uuidv4 } from 'uuid';
 import tasksData from '../tasks.json';
+
+// Define a thunk to add a task asynchronously
+export const addTaskAsync = (undoneTask) => (dispatch) => {
+  // Assuming addTask is a synchronous action
+  dispatch(addTask(undoneTask));
+};
 
 // Create a slice for tasks with initial state and reducers
 export const tasksSlice = createSlice({
@@ -8,6 +14,7 @@ export const tasksSlice = createSlice({
   initialState: {
     allTasks: tasksData.map((task) => ({
       ...task,
+      id: uuidv4(), // Use uuid to generate unique ID
       createdAt: new Date().toISOString(), // Convert to string
       dueDate: null,
     })),
@@ -18,14 +25,13 @@ export const tasksSlice = createSlice({
     completedTasks: [], // Add this line to initialize completedTasks as an empty array
   },
   reducers: {
-    // Add a new task to the allTasks array
     addTask: (state, action) => {
       const { text, dueDate } = action.payload;
       const newTask = {
-        id: Date.now(),
+        id: uuidv4(),
         text,
         chosen: false,
-        createdAt: new Date().toISOString(), // Convert to a string
+        createdAt: new Date().toISOString(),
         dueDate,
       };
       state.allTasks.push(newTask);
@@ -35,19 +41,18 @@ export const tasksSlice = createSlice({
       const undoneTask = state.chosenTasks.find((task) => task.id === taskId);
 
       if (undoneTask) {
-        // Remove the task from chosenTasks
+        // Update chosen property in allTasks array
+        const taskIndex = state.allTasks.findIndex((task) => task.id === taskId);
+        if (taskIndex !== -1) {
+          state.allTasks[taskIndex].chosen = false;
+        }
+
         state.chosenTasks = state.chosenTasks.filter(
           (task) => task.id !== taskId
         );
-
-        // Reset the chosen property
-        undoneTask.chosen = false;
-
-        // Add the undone task back to allTasks
-        state.allTasks.push(undoneTask);
+        state.chosenToday = state.chosenToday.filter((id) => id !== taskId);
       }
     },
-    // Remove a task by its ID, move it to removedTasks array
     removeTask: (state, action) => {
       const removedTask = state.allTasks.find(
         (task) => task.id === action.payload
@@ -60,38 +65,16 @@ export const tasksSlice = createSlice({
       );
       state.removedTasks.push(removedTask);
     },
-    // Undo the removal of the last removed task
     undoRemoveTask: (state) => {
       const lastRemovedTask = state.removedTasks.pop();
       if (lastRemovedTask) {
         state.allTasks.push(lastRemovedTask);
 
-        // Check if the undone task was chosen and remove it from chosenTasks
         if (lastRemovedTask.chosen) {
           state.chosenTasks = state.chosenTasks.filter(
             (task) => task.id !== lastRemovedTask.id
           );
 
-          // Also update the chosenToday array if needed
-          const index = state.chosenToday.indexOf(lastRemovedTask.id);
-          if (index !== -1) {
-            state.chosenToday.splice(index, 1);
-          }
-        }
-      }
-    },
-    undoRemoveTask: (state) => {
-      const lastRemovedTask = state.removedTasks.pop();
-      if (lastRemovedTask) {
-        state.allTasks.push(lastRemovedTask);
-
-        // Check if the undone task was chosen and remove it from chosenTasks
-        if (lastRemovedTask.chosen) {
-          state.chosenTasks = state.chosenTasks.filter(
-            (task) => task.id !== lastRemovedTask.id
-          );
-
-          // Also update the chosenToday array if needed
           const index = state.chosenToday.indexOf(lastRemovedTask.id);
           if (index !== -1) {
             state.chosenToday.splice(index, 1);
@@ -106,23 +89,19 @@ export const tasksSlice = createSlice({
       );
 
       if (taskToComplete) {
-        // Remove the task from chosenTasks
         state.chosenTasks = state.chosenTasks.filter(
           (task) => task.id !== taskId
         );
 
-        // Check if the task was already completed
         const alreadyCompleted =
           state.completedTasks.findIndex((task) => task.id === taskId) !== -1;
 
         if (!alreadyCompleted) {
-          // Add the completed task to completedTasks
           state.completedTasks.push({
             ...taskToComplete,
             completedAt: new Date().toISOString(),
           });
         } else {
-          // If the task was already completed, move it back to chosenTasks
           state.chosenTasks.push(taskToComplete);
         }
       }
@@ -134,20 +113,14 @@ export const tasksSlice = createSlice({
       );
 
       if (undoneTask) {
-        // Remove the task from completedTasks
         state.completedTasks = state.completedTasks.filter(
           (task) => task.id !== taskId
         );
 
-        // Reset the completedAt timestamp
         undoneTask.completedAt = null;
-
-        // Add the undone task back to chosenTasks
         state.chosenTasks.push(undoneTask);
       }
     },
-
-    // Toggle the chosen status of a task
     toggleTaskChosen: (state, action) => {
       const taskId = action.payload;
       const task = state.allTasks.find((task) => task.id === taskId);
@@ -155,10 +128,10 @@ export const tasksSlice = createSlice({
       if (task) {
         if (task.chosen) {
           state.chosenTasks = state.chosenTasks.filter(
-            (task) => task.id !== taskId
+            (chosenTask) => chosenTask.id !== taskId
           );
+          state.chosenToday = state.chosenToday.filter((id) => id !== taskId);
         } else {
-          // Check if the dailyTaskLimit has been reached
           if (state.chosenToday.length < state.dailyTaskLimit) {
             state.chosenTasks.push(task);
             state.chosenToday.push(task.id);
@@ -166,10 +139,9 @@ export const tasksSlice = createSlice({
             console.warn('Daily task limit reached!');
           }
         }
-        task.chosen = !task.chosen; // Updated from chosen
+        task.chosen = !task.chosen;
       }
     },
-    // Start a new day by resetting chosenToday array and unchecking all chosen tasks
     startNewDay: (state) => {
       state.chosenToday = [];
       state.allTasks.forEach((task) => {
@@ -179,7 +151,7 @@ export const tasksSlice = createSlice({
           task.chosen = false;
         }
       });
-    },    
+    },
   },
 });
 
@@ -197,3 +169,11 @@ export const {
 
 // Export reducer
 export default tasksSlice.reducer;
+
+// Create store instance locally
+const store = configureStore({
+  reducer: tasksSlice.reducer,
+});
+
+store.dispatch(undoChosenTask({ taskId: 'your-task-id' }));
+

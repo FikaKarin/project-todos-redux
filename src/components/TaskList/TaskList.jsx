@@ -60,8 +60,6 @@ export const TaskList = () => {
   }, []);
 
   const handleToggleChosen = (taskId) => {
-    console.log('chosenToday:', chosenToday);
-
     if (chosenToday) {
       console.log('chosenToday.length:', chosenToday.length);
 
@@ -83,8 +81,21 @@ export const TaskList = () => {
   };
 
   const handleUndoRemoveTask = () => {
-    dispatch(undoRemoveTask());
-  };
+    const lastRemovedTask = removedTasks[removedTasks.length - 1];
+    if (lastRemovedTask) {
+      dispatch(addTask(lastRemovedTask));  // Dispatch the addTask action from the slice
+  
+      if (lastRemovedTask.chosen) {
+        dispatch(toggleTaskChosen(lastRemovedTask.id));  // Dispatch the toggleTaskChosen action from the slice
+      }
+  
+      // Remove the last removed task from the removedTasks array
+      dispatch(undoRemoveTask());
+  
+      // Update localStorage
+      localStorage.setItem('chosenTasks', JSON.stringify(allTasks));
+    }
+  };  
 
   function getTimeRemaining() {
     const now = new Date();
@@ -127,7 +138,7 @@ export const TaskList = () => {
           )
           .map((task) => (
             <TaskListItem
-              key={`${task.id}-${task.text}`} // Combine id and text for a more unique key
+              key={`${task.id}-${task.text}`}
               task={task}
               handleToggleChosen={handleToggleChosen}
               handleRemoveTask={handleRemoveTask}
